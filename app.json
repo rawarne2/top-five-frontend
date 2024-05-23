@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "top-five-frontend",
+    "name": "Top Five Dating App",
     "slug": "top-five-frontend",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -12,7 +12,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.rawarne2.topfivefrontend",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -22,6 +26,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "" // TODO: get projectId from env
+      }
     }
   }
 }

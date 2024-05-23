@@ -9,13 +9,23 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.5.20",
+    "@react-navigation/native": "^6.1.17",
+    "@tanstack/react-query": "^5.37.1",
+    "axios": "^1.7.2",
+    "base-64": "^1.0.0",
     "expo": "~51.0.8",
+    "expo-dev-client": "~4.0.14",
+    "expo-secure-store": "^13.0.1",
     "expo-status-bar": "~1.12.1",
-    "react": "18.2.0",
-    "react-native": "0.74.1"
+    "react": "^18.2.0",
+    "react-native": "^0.74.1",
+    "react-native-deck-swiper": "^2.0.17"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/core": "^7.24.5",
+    "@tanstack/eslint-plugin-query": "^5.35.6",
+    "@types/base-64": "^1.0.2",
     "@types/react": "~18.2.45",
     "typescript": "^5.1.3"
   },
