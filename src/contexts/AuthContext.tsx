@@ -35,7 +35,7 @@ const AuthContext = createContext<{
   setIsLoggedIn: (isLoggedIn: boolean) => void;
 }>({
   user: null,
-  isLoading: true,
+  isLoading: false,
   isLoggedIn: false,
   setIsLoading: () => {},
   setUser: () => {},
@@ -59,16 +59,16 @@ export const AuthProvider = ({ children }, props) => {
         const result = await apiClient.get(`api/users/user_by_id/${userId}/`);
         if (result.status === 200) {
           setUser(result?.data);
-          setIsLoggedIn(true);
           setIsLoading(false);
+          setIsLoggedIn(true);
         }
         return result?.data as User;
       }
     } catch (error) {
-      console.error('error getting user: ', error);
+      console.error('loadUser error: ', error);
+      setIsLoading(false);
       return null;
     }
-    setIsLoading(false);
   };
 
   return (

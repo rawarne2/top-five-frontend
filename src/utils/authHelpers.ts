@@ -12,11 +12,11 @@ export const login = async (
         (user: User | null): void;
         (arg0: any): void;
     },
-    setIsLoggedIn: { (isLoggedIn: boolean): void; (arg0: boolean): void },
-    setIsLoading: { (isLoading: boolean): void; (arg0: boolean): void }
+    setIsLoggedIn: any,
+    setIsLoading: any,
 ) => {
     try {
-        setIsLoading(true);
+        await setIsLoading(true);
         const { data, config, headers, status, request } = await apiClient.post('api/users/login/', {
             email: email,
             password: password,
@@ -32,13 +32,12 @@ export const login = async (
             await saveSecureStoreUID(userId);
             setUser(data?.user); // TODO: validate user response
             setIsLoggedIn(true);
-            setIsLoading(false);
         }
     } catch (error) {
         console.error('login error: ', error);
-        setIsLoading(false);
         // TODO: handle 401 for incorrect email and/or password
     }
+    setIsLoading(false);
 };
 
 export const logout = async (setUser, setIsLoggedIn, setIsLoading) => {
