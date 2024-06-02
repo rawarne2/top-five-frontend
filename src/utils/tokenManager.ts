@@ -25,9 +25,7 @@ export const getSSRefreshToken = (): Promise<string | null> => {
 
 // Token Verification
 
-// TODO: make it work for refresh tokens too
 export function parseAccessToken(accessToken: string) {
-    console.log("accessToken: ", accessToken)
     const tokenParts = accessToken?.split(".");
     // The payload is the second part of the token
     const tokenDate = atob(tokenParts[1]);
@@ -35,11 +33,12 @@ export function parseAccessToken(accessToken: string) {
     return payload;
 }
 
-export function isTokenExpired(tokenString: string) {
+export function isValidToken(tokenString: string) {
     const tokenData = parseAccessToken(tokenString);
     const expirationTime = tokenData.exp * 1000; // Convert expiration time from seconds to milliseconds
     const currentTime = Date.now(); // Current time in milliseconds
 
     // Compare the expiration time with the current time
-    return expirationTime < currentTime;
+    console.log('isValidToken: ', expirationTime > currentTime)
+    return expirationTime > currentTime;
 }

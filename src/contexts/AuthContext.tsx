@@ -35,7 +35,7 @@ const AuthContext = createContext<{
   setIsLoggedIn: (isLoggedIn: boolean) => void;
 }>({
   user: null,
-  isLoading: false,
+  isLoading: true,
   isLoggedIn: false,
   setIsLoading: () => {},
   setUser: () => {},
