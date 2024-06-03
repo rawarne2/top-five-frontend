@@ -1,0 +1,169 @@
+{
+  "users": [
+    {
+      "userId": 1,
+      "first_name": "Michael",
+      "last_name": "Scott",
+      "image": "https://randomuser.me/api/portraits/women/1.jpg",
+      "age": 40,
+      "bio": "I'm the world's best boss! Seeking a companion for Dundie Awards and quirky office shenanigans.",
+      "career": "Regional Manager",
+      "education": "Bachelor's in Business Administration",
+      "last_message": "Don't forget, tomorrow is the Dundie Awards! Don't forget, tomorrow is the Dundie Awards! Don't forget, tomorrow is the Dundie Awards! Don't forget, tomorrow is the Dundie Awards! Don't forget, tomorrow is the Dundie Awards!"
+    },
+    {
+      "userId": 2,
+      "first_name": "Pam",
+      "last_name": "Beesly",
+      "image": "https://randomuser.me/api/portraits/women/2.jpg",
+      "age": 30,
+      "bio": "I'm an artist at heart and love capturing moments through my sketches. Seeking someone who appreciates creativity and kindness.",
+      "career": "Receptionist",
+      "education": "Bachelor's in Art",
+      "last_message": "Can I sketch you sometime?"
+    },
+    {
+      "userId": 3,
+      "first_name": "Jim",
+      "last_name": "Halpert",
+      "image": "https://randomuser.me/api/portraits/women/3.jpg",
+      "age": 35,
+      "bio": "I'm a prankster with a heart of gold. Let's pull hilarious office pranks and share laughs together!",
+      "career": "Salesman",
+      "education": "Bachelor's in Communication",
+      "last_message": "Do you want to team up for the next prank on Dwight?"
+    },
+    {
+      "userId": 4,
+      "first_name": "Dwight",
+      "last_name": "Schrute",
+      "image": "https://randomuser.me/api/portraits/women/4.jpg",
+      "age": 38,
+      "bio": "I'm a beet farmer and proud of it! Seeking someone who shares my passion for agriculture and survival skills.",
+      "career": "Assistant Regional Manager",
+      "education": "Bachelor's in Agriculture",
+      "last_message": "Beets are the best. Fact."
+    },
+    {
+      "userId": 5,
+      "first_name": "Angela",
+      "last_name": "Martin",
+      "image": "https://randomuser.me/api/portraits/women/5.jpg",
+      "age": 34,
+      "bio": "I'm a cat lover with a tough exterior. Seeking someone who values loyalty and punctuality.",
+      "career": "Head of Accounting",
+      "education": "Bachelor's in Accounting",
+      "last_message": "Sprinkles needs a vet appointment. Can you recommend one?"
+    },
+    {
+      "userId": 6,
+      "first_name": "Kevin",
+      "last_name": "Malone",
+      "image": "https://randomuser.me/api/portraits/women/6.jpg",
+      "age": 36,
+      "bio": "I'm a big fan of chili and jazz music. Seeking someone who enjoys good food and has a sense of humor.",
+      "career": "Accountant",
+      "education": "Bachelor's in Accounting",
+      "last_message": "I made my famous chili again. Want to try some?"
+    },
+    {
+      "userId": 7,
+      "first_name": "Oscar",
+      "last_name": "Martinez",
+      "image": "https://randomuser.me/api/portraits/women/7.jpg",
+      "age": 39,
+      "bio": "I'm passionate about politics and finance. Let's have stimulating conversations and explore new ideas together!",
+      "career": "Accountant",
+      "education": "Master's in Finance",
+      "last_message": "Have you read the latest financial report?"
+    },
+    {
+      "userId": 8,
+      "first_name": "Kelly",
+      "last_name": "Kapoor",
+      "image": "https://randomuser.me/api/portraits/women/8.jpg",
+      "age": 28,
+      "bio": "I'm a social butterfly who loves fashion and celebrity gossip. Seeking someone who can keep up with my energy!",
+      "career": "Customer Service Representative",
+      "education": "Bachelor's in Communication",
+      "last_message": "OMG, did you see what happened on the latest episode?"
+    },
+    {
+      "userId": 9,
+      "first_name": "Stanley",
+      "last_name": "Hudson",
+      "image": "https://randomuser.me/api/portraits/women/9.jpg",
+      "age": 45,
+      "bio": "I'm a crossword puzzle enthusiast who enjoys a quiet work environment. Let's enjoy crossword puzzles and coffee together!",
+      "career": "Salesman",
+      "education": "Bachelor's in Marketing",
+      "last_message": "Got a new crossword for us to solve."
+    },
+    {
+      "userId": 10,
+      "first_name": "Meredith",
+      "last_name": "Palmer",
+      "image": "https://randomuser.me/api/portraits/women/10.jpg",
+      "age": 42,
+      "bio": "I'm a party animal who loves to have a good time. Seeking someone who enjoys karaoke and bar hopping!",
+      "career": "Supplier Relations Representative",
+      "education": "Some college",
+      "last_message": "Hey, I saw this dress online and thought of you! Check it out."
+    },
+    {
+      "userId": 11,
+      "first_name": "Phyllis",
+      "last_name": "Vance",
+      "image": "https://randomuser.me/api/portraits/women/11.jpg",
+      "age": 50,
+      "bio": "I'm a warm and caring person who loves knitting and social events. Looking for someone who enjoys the simple pleasures of life.",
+      "career": "Saleswoman",
+      "education": "Associate's Degree",
+      "last_message": "I knitted a scarf. Would you like one?"
+    },
+    {
+      "userId": 12,
+      "first_name": "Ryan",
+      "last_name": "Howard",
+      "image": "https://randomuser.me/api/portraits/women/12.jpg",
+      "age": 27,
+      "bio": "I'm an ambitious entrepreneur with a love for startups and innovation. Seeking someone who can match my drive and passion.",
+      "career": "Temporary Worker",
+      "education": "MBA",
+      "last_message": "Got a new startup idea. Want to hear it?"
+    },
+    {
+      "userId": 13,
+      "first_name": "Toby",
+      "last_name": "Flenderson",
+      "image": "https://randomuser.me/api/portraits/women/13.jpg",
+      "age": 41,
+      "bio": "I'm a calm and thoughtful person who enjoys reading and peaceful moments. Looking for someone who appreciates tranquility.",
+      "career": "HR Representative",
+      "education": "Bachelor's in Psychology",
+      "last_message": "Finished reading a great book. Want to borrow it?"
+    },
+    {
+      "userId": 14,
+      "first_name": "Creed",
+      "last_name": "Bratton",
+      "image": "https://randomuser.me/api/portraits/women/14.jpg",
+      "age": 55,
+      "bio": "I'm a mysterious and quirky individual with many stories to tell. Seeking someone who enjoys the unexpected.",
+      "career": "Quality Assurance",
+      "education": "Unknown",
+      "last_message": "I found a new place. We should go there."
+    },
+    {
+      "userId": 15,
+      "first_name": "Darryl",
+      "last_name": "Philbin",
+      "image": "https://randomuser.me/api/portraits/women/15.jpg",
+      "age": 39,
+      "bio": "I'm a laid-back guy who loves sports and music. Looking for someone who can enjoy a game or a jam session with me.",
+      "career": "Warehouse Foreman",
+      "education": "Associate's Degree",
+      "last_message": "Want to catch the game this weekend?"
+    }
+  ]
+}

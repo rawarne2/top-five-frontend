@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 
 import Swiper from 'react-native-deck-swiper';
 import { useAuth } from '../contexts/AuthContext';
+import usersCardData from '../data/usersCardData.json';
 
 const NoMoreCards = () => {
   console.log('No more cards');
@@ -23,59 +24,7 @@ const Card = ({ cardData }: any) => (
 export function SwipeCards() {
   const { user } = useAuth();
 
-  const userCards = [
-    {
-      name: 'name1',
-      image: 'https://media.giphy.com/media/GfXFVHUzjlbOg/giphy.gif',
-      age: 28,
-    },
-    {
-      name: 'name2',
-      image: 'https://media.giphy.com/media/GfXFVHUzjlbOg/giphy.gif',
-      age: 18,
-    },
-    {
-      name: 'name3',
-      image: 'https://media.giphy.com/media/GfXFVHUzjlbOg/giphy.gif',
-      age: 25,
-    },
-    {
-      name: 'name4',
-      image: 'https://media.giphy.com/media/GfXFVHUzjlbOg/giphy.gif',
-      age: 35,
-    },
-    {
-      name: 'name5',
-      image: 'https://media.giphy.com/media/GfXFVHUzjlbOg/giphy.gif',
-      age: 45,
-    },
-    {
-      name: 'name6',
-      image: 'https://media.giphy.com/media/GfXFVHUzjlbOg/giphy.gif',
-      age: 50,
-    },
-    {
-      name: 'name7',
-      image: 'https://media.giphy.com/media/GfXFVHUzjlbOg/giphy.gif',
-      age: 19,
-    },
-    {
-      name: 'name8',
-      image: 'https://media.giphy.com/media/GfXFVHUzjlbOg/giphy.gif',
-      age: 26,
-    },
-    {
-      name: 'name9',
-      image: 'https://media.giphy.com/media/GfXFVHUzjlbOg/giphy.gif',
-      age: 22,
-    },
-    {
-      name: 'name10',
-      image: 'https://media.giphy.com/media/GfXFVHUzjlbOg/giphy.gif',
-      age: 29,
-    },
-  ];
-  const [cards, setCards] = useState(userCards);
+  const [cards, setCards] = useState(usersCardData.users);
 
   const onSwiped = () => {
     setCards((prevCards) => prevCards.slice(1));
