@@ -1,4 +1,6 @@
-import { Button, Text, View } from 'react-native';
+import { View } from 'react-native';
+import { Button, Text } from 'react-native-paper';
+
 import { useAuth } from '../contexts/AuthContext';
 import { logout } from '../utils/authHelpers';
 
@@ -11,7 +13,9 @@ const ProfileScreen = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Profile!</Text>
-      <Button title='Logout' onPress={handleLogout} />
+      <Button onPress={handleLogout} mode='contained-tonal'>
+        Logout
+      </Button>
     </View>
   );
 };

@@ -19,7 +19,6 @@ const apiClient = axios.create({
 
 // Request Interceptor
 apiClient.interceptors.request.use(async (config) => {
-    console.log('starting request: ', config)
     if (!config.headers.Authorization && config.url !== 'api/token/refresh/') {
         const accessToken = await getSSAccessToken();
 
@@ -31,7 +30,6 @@ apiClient.interceptors.request.use(async (config) => {
             if (refreshToken) {
                 try {
                     const response = await apiClient.post("api/token/refresh/", { refresh: refreshToken });
-                    console.log('new token response: ', response)
 
                     const newAccessToken = response?.data?.access;
                     const newRefreshToken = response?.data?.refresh;
@@ -53,16 +51,16 @@ apiClient.interceptors.request.use(async (config) => {
 
 // Response Interceptor
 apiClient.interceptors.response.use((response) => {
-    console.log('starting response: ', response)
+    console.log('axios response: ', response)
     return response
 },
     async (error) => {
         if (error?.response?.status === 401 && !(error?.response?.data?.error === 'Invalid email or password')) {
+            console.log('401 non-login error: ', error)
             const refreshToken: string | null = await getSSRefreshToken()
             if (refreshToken) {
                 try {
                     const response = await apiClient.post("api/token/refresh/", { refresh: refreshToken });
-                    console.log('new token response: ', response)
 
                     const newAccessToken = response?.data?.access;
                     const newRefreshToken = response?.data?.refresh;
@@ -79,7 +77,7 @@ apiClient.interceptors.response.use((response) => {
                 }
             }
         }
-        console.log("error response: ", error.message)
+        console.error("error response: ", error)
         return Promise.reject(error);
     }
 );

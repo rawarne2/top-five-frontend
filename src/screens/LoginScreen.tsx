@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { TextInput, Button, View, StyleSheet } from 'react-native';
+import { TextInput, View, StyleSheet } from 'react-native';
+import { Button } from 'react-native-paper';
 import { useAuth } from '../contexts/AuthContext';
 import { login } from '../utils/authHelpers';
 
@@ -30,7 +31,9 @@ function LoginScreen() {
             onChangeText={setPassword}
             secureTextEntry
           />
-          <Button title='Login' onPress={handleLogin} />
+          <Button onPress={handleLogin} mode='contained-tonal'>
+            Login
+          </Button>
         </View>
       )}
     </>
