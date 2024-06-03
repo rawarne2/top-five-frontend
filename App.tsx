@@ -1,14 +1,10 @@
 import React from 'react';
-import { Text, View, StyleSheet, SafeAreaView, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { SwipeCards } from './src/screens/SwipeCards';
-import LoginScreen from './src/screens/LoginScreen';
+import { PaperProvider } from 'react-native-paper';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider, useAuth } from './src/contexts/AuthContext';
-import { logout } from './src/utils/authHelpers';
+import { AuthProvider } from './src/contexts/AuthContext';
 import MainComponents from './src/components/MainComponents';
+import { SafeAreaView, StyleSheet } from 'react-native';
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -16,17 +12,20 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <NavigationContainer>
-          <MainComponents />
-        </NavigationContainer>
+        <PaperProvider>
+          <NavigationContainer>
+            <SafeAreaView style={styles.container}>
+              <MainComponents />
+            </SafeAreaView>
+          </NavigationContainer>
+        </PaperProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: 'lightgrey',
-//   },
-// });
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
