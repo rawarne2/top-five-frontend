@@ -1,42 +1,64 @@
 import React, { useState } from 'react';
-import { TextInput, View, StyleSheet } from 'react-native';
-import { Button } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { Button, Text, TextInput } from 'react-native-paper';
 import { useAuth } from '../contexts/AuthContext';
 import { login } from '../utils/authHelpers';
+import LoadingScreen from './LoadingScreen';
+import apiClient from '../api/apiClient';
 
 function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { isLoggedIn, setUser, setIsLoading, setIsLoggedIn } = useAuth();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const { setUser, setIsLoggedIn } = useAuth();
 
   const handleLogin = async () => {
-    login(email, password, setUser, setIsLoggedIn, setIsLoading);
+    // show spinner if loading
+    setIsLoggingIn(true);
+    try {
+      const loginResult = await login(email, password);
+      if (loginResult) {
+        console.log({ loginResult });
+        setUser(loginResult.user);
+        setIsLoggedIn(true);
+        setErrorMessage('');
+      } else {
+        console.log('Invalid email or password.');
+        setErrorMessage('Invalid email or password.');
+      }
+    } catch (error) {
+      setErrorMessage('An error occurred. Please try again.');
+    } finally {
+      setIsLoggingIn(false);
+    }
   };
 
+  if (isLoggingIn) {
+    return <LoadingScreen />;
+  }
+
   return (
-    <>
-      {!isLoggedIn && (
-        <View style={styles.container}>
-          <TextInput
-            style={styles.input}
-            placeholder='Email'
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize={'none'}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder='Password'
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          <Button onPress={handleLogin} mode='contained-tonal'>
-            Login
-          </Button>
-        </View>
-      )}
-    </>
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder='Email'
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize={'none'}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder='Password'
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <Text style={{ color: 'red' }}>{errorMessage}</Text>
+      <Button onPress={handleLogin} mode='contained-tonal'>
+        Login
+      </Button>
+    </View>
   );
 }
 
@@ -45,7 +67,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'lightblue',
     paddingTop: 24,
   },
   input: {
@@ -65,6 +86,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingTop: 10,
     paddingHorizontal: 10,
+  },
+  error: {
+    color: 'red',
+    padding: 4,
   },
 });
 

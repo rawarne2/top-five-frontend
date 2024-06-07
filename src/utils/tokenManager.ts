@@ -34,11 +34,15 @@ export function parseAccessToken(accessToken: string) {
 }
 
 export function isValidToken(tokenString: string) {
-    const tokenData = parseAccessToken(tokenString);
-    const expirationTime = tokenData.exp * 1000; // Convert expiration time from seconds to milliseconds
-    const currentTime = Date.now(); // Current time in milliseconds
+    if (tokenString) {
+        const tokenData = parseAccessToken(tokenString);
+        const expirationTime = tokenData.exp * 1000; // Convert expiration time from seconds to milliseconds
+        const currentTime = Date.now(); // Current time in milliseconds
 
-    // Compare the expiration time with the current time
-    console.log('isValidToken: ', expirationTime > currentTime)
-    return expirationTime > currentTime;
+        // Compare the expiration time with the current time
+        return expirationTime > currentTime;
+    } else {
+        console.warn('No token passed to token isValidToken')
+        return false;
+    }
 }

@@ -9,7 +9,7 @@ export enum SSKey {
 
 export const saveToSecureStore = async (key: string, value: string) => {
     try {
-        await SecureStore.setItemAsync(key, value); // check if options are needed for third parameter
+        await SecureStore.setItemAsync(key, JSON.stringify(value),);
     } catch (error) {
         console.error('error saving SecureStore value: ', error)
     }
@@ -17,7 +17,8 @@ export const saveToSecureStore = async (key: string, value: string) => {
 
 export const getSecureStoreValue = async (key: SSKey): Promise<string | null> => {
     try {
-        return await SecureStore.getItemAsync(key);
+        const value = await SecureStore.getItemAsync(key);
+        return JSON.parse(value)
     } catch (error) {
         console.error(`error getting SecureStore value with key: ${key}: `, error)
         return null;

@@ -4,54 +4,69 @@ import { deleteSecureStoreUID, saveSecureStoreUID } from "./secureStoreManager";
 import { deleteSecureStoreJWTs, getSSRefreshToken, saveSecureStoreJWTs } from "./tokenManager";
 
 
+// type LoginResponseType 
+type LoginResponseType = {
+    user: User,
+    tokens: {
+        access: string,
+        refresh: string,
+    }
+};
 
-export const login = async (
-    email: string,
-    password: string,
-    setUser: {
-        (user: User | null): void;
-        (arg0: any): void;
-    },
-    setIsLoggedIn: any,
-    setIsLoading: any,
-) => {
+export const login = async (email: string, password: string): Promise<LoginResponseType | null> => {
     try {
-        await setIsLoading(true);
-        const { data, config, headers, status, request } = await apiClient.post('api/users/login/', {
+        const response = await apiClient.post('api/users/login/', {
             email: email,
             password: password,
-        });
-        console.log({ data, config, headers, status, request })
+        })
+        console.log('login response: ', response)
+        if (response) {
+            const { access, refresh } = response?.data?.tokens
+            const user = response?.data?.user;
 
-        const refreshToken = data?.tokens?.refresh;
-        const accessToken = data?.tokens?.access;
-        const userId = String(data?.user?.id);
+            await saveSecureStoreJWTs(access, refresh);
+            await saveSecureStoreUID(user?.id);
 
-        if (accessToken && refreshToken && userId) {
-            await saveSecureStoreJWTs(accessToken, refreshToken);
-            await saveSecureStoreUID(userId);
-            setUser(data?.user); // TODO: validate user response
-            setIsLoggedIn(true);
+            return {
+                user, tokens: { access, refresh }
+            }
+        } else {
+            return null
         }
     } catch (error) {
-        console.error('login error: ', error);
-        // TODO: handle 401 for incorrect email and/or password
+        console.log('login error: ', error);
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            if (error.response.status === 401) {
+                console.log('Unauthorized access - 401');
+            }
+        } else if (error.request) {
+            // The request was made but no response was received
+            console.error('No response received:', error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.error('Error setting up the request:', error.message);
+        }
+        return null
     }
-    setIsLoading(false);
 };
 
 export const logout = async (setUser, setIsLoggedIn, setIsLoading) => {
     try {
-        setIsLoading(true);
         const refreshToken = await getSSRefreshToken();
-        await apiClient.post("api/users/logout/", {
-            refresh_token: refreshToken,
-        });
-        await deleteSecureStoreJWTs();
-        await deleteSecureStoreUID();
-        setUser(null);
-        setIsLoggedIn(false);
-        setIsLoading(false);
+        if (refreshToken) {
+            await apiClient.post("api/users/logout/", {
+                refresh_token: refreshToken,
+            });
+            await deleteSecureStoreJWTs();
+            await deleteSecureStoreUID();
+            setUser(null);
+            setIsLoggedIn(false);
+            delete apiClient.defaults.headers.common.Authorization
+        } else {
+            console.warn('No refresh token provided in logout')
+        }
     } catch (err) {
         console.error("logout error: ", err);
         setIsLoading(false);
