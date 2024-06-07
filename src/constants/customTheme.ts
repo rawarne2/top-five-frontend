@@ -1,6 +1,6 @@
-import { DefaultTheme } from "react-native-paper";
+import { DefaultTheme, MD3Theme } from "react-native-paper";
 
-export const customTheme = {
+export const customTheme: MD3Theme = {
     ...DefaultTheme,
     colors: {
         ...DefaultTheme.colors,
@@ -32,7 +32,7 @@ export const customTheme = {
         onTertiaryContainer: 'rgba(10, 10, 10, 1)',
 
         onSurface: 'rgba(10, 10, 10, 1)',
-        onSurfaceVariant: 'rgba(10, 10, 10, 1)',
+        onSurfaceVariant: 'rgba(22, 44, 66, 1)',
 
         onError: 'rgba(245, 245, 245, 1)',
 
@@ -42,4 +42,4 @@ export const customTheme = {
         inverseSurface: 'rgba(245, 245, 245, 1)',
         inverseOnSurface: 'rgba(10, 10, 10, 1)',
     },
-};
+}

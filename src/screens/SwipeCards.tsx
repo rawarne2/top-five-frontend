@@ -18,7 +18,10 @@ const NoMoreCards = () => {
 const Card = ({ cardData }: any) => (
   <View style={styles.card}>
     <Image style={styles.thumbnail} source={{ uri: cardData?.image }} />
-    <Text style={styles.text}>{cardData?.name}</Text>
+    <Text style={styles.text}>
+      {cardData?.first_name} {cardData?.last_name}, {cardData?.age}
+    </Text>
+    <Text style={styles.text}>{cardData?.career}</Text>
   </View>
 );
 
@@ -27,7 +30,7 @@ export function SwipeCards() {
   const theme = useTheme();
 
   const [cards, setCards] = useState(usersCardData.users);
-
+  const [hasCards, setHasCards] = useState(usersCardData.users.length > 0);
   const onSwiped = () => {
     setCards((prevCards) => prevCards.slice(1));
   };
@@ -38,21 +41,21 @@ export function SwipeCards() {
     console.log('nope');
   };
 
-  console.log('SwipeCards - user: ', user);
-
-  return (
+  return !hasCards ? (
+    <NoMoreCards />
+  ) : (
     <View style={styles.container}>
       <Swiper
         cards={cards}
         renderCard={(cardData) => <Card cardData={cardData} />}
         stackSize={2}
         onSwiped={onSwiped}
-        onSwipedAll={() => <NoMoreCards />}
+        onSwipedAll={() => setHasCards(false)}
         onSwipedRight={handleYup}
         onSwipedLeft={handleNope}
         verticalSwipe={false}
         cardIndex={0}
-        horizontalThreshold={10}
+        keyExtractor={(data) => data?.userId?.toString()}
         key={cards.length}
         backgroundColor={theme.colors.background}
       />
@@ -64,7 +67,8 @@ export function SwipeCards() {
 const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
-    borderRadius: 5,
+    borderRadius: 20,
+    height: 600,
     overflow: 'hidden',
     borderColor: 'grey',
     backgroundColor: 'white',

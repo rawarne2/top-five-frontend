@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, Text, TextInput } from 'react-native-paper';
+import { Button, Text, TextInput, useTheme } from 'react-native-paper';
 import { useAuth } from '../contexts/AuthContext';
 import { login } from '../utils/authHelpers';
 import LoadingScreen from './LoadingScreen';
-import apiClient from '../api/apiClient';
 
 function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -12,6 +11,7 @@ function LoginScreen() {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const { setUser, setIsLoggedIn } = useAuth();
+  const theme = useTheme();
 
   const handleLogin = async () => {
     // show spinner if loading
@@ -54,7 +54,9 @@ function LoginScreen() {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Text style={{ color: 'red' }}>{errorMessage}</Text>
+      <Text style={{ color: theme.colors.error, padding: 4 }}>
+        {errorMessage}
+      </Text>
       <Button onPress={handleLogin} mode='contained-tonal'>
         Login
       </Button>
@@ -86,10 +88,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingTop: 10,
     paddingHorizontal: 10,
-  },
-  error: {
-    color: 'red',
-    padding: 4,
   },
 });
 
