@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { useTheme } from 'react-native-paper';
 
 const LoadingScreen = () => {
+  const theme = useTheme();
   return (
     <View style={styles.container}>
-      <ActivityIndicator size='large' color='#FF0000' />
+      <ActivityIndicator size='large' color={theme.colors.secondary} />
     </View>
   );
 };
@@ -14,7 +16,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
   },
 });
 

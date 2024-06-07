@@ -1,10 +1,11 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { PaperProvider } from 'react-native-paper';
+import { DefaultTheme, PaperProvider } from 'react-native-paper';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './src/contexts/AuthContext';
 import MainComponents from './src/components/MainComponents';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { customTheme } from './src/constants/customTheme';
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -12,11 +13,11 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <PaperProvider>
+        <PaperProvider theme={customTheme}>
           <NavigationContainer>
-            <SafeAreaView style={styles.container}>
+            <View style={styles.mainView}>
               <MainComponents />
-            </SafeAreaView>
+            </View>
           </NavigationContainer>
         </PaperProvider>
       </AuthProvider>
@@ -25,7 +26,9 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  mainView: {
     flex: 1,
+    paddingTop: 48,
+    backgroundColor: customTheme.colors.background,
   },
 });

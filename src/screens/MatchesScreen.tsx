@@ -15,7 +15,7 @@ const MatchesScreen = () => {
 
   return (
     <View>
-      <Card mode='elevated' style={styles.mainCard}>
+      <Card mode='elevated' style={styles.matchCard}>
         {userData.map((item, i) => (
           <MatchCardComponent data={item} isTop5={false} key={i} index={i} />
         ))}
@@ -25,9 +25,8 @@ const MatchesScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  mainCard: {
-    justifyContent: 'space-between',
-    margin: 2,
+  matchCard: {
+    margin: 4,
   },
 });
 

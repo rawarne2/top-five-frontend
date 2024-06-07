@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { useAuth } from '../contexts/AuthContext';
 import usersCardData from '../data/usersCardData.json';
+import { useTheme } from 'react-native-paper';
 
 const NoMoreCards = () => {
   console.log('No more cards');
@@ -23,6 +24,7 @@ const Card = ({ cardData }: any) => (
 
 export function SwipeCards() {
   const { user } = useAuth();
+  const theme = useTheme();
 
   const [cards, setCards] = useState(usersCardData.users);
 
@@ -52,6 +54,7 @@ export function SwipeCards() {
         cardIndex={0}
         horizontalThreshold={10}
         key={cards.length}
+        backgroundColor={theme.colors.background}
       />
       <Text style={styles.text}>Hello {user?.first_name}!!!</Text>
     </View>

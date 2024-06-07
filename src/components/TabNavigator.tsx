@@ -3,15 +3,18 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ProfileScreen from '../screens/ProfileScreen';
 import { SwipeCards } from '../screens/SwipeCards';
 import MatchesScreen from '../screens/MatchesScreen';
+import { useTheme } from 'react-native-paper';
 
 const TabNavigator = () => {
   const Tab = createMaterialBottomTabNavigator();
+  const { colors } = useTheme();
 
   return (
     <Tab.Navigator
       initialRouteName='SwipeCards'
-      activeColor='#e91e63'
-      barStyle={{ height: 75 }}
+      activeColor={colors.secondary}
+      activeIndicatorStyle={{ backgroundColor: colors.primary }}
+      barStyle={{ height: 80 }}
     >
       <Tab.Screen
         key={1}

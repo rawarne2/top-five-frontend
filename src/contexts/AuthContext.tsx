@@ -27,19 +27,19 @@ export type User = {
 };
 
 const AuthContext = createContext<{
-  user: User | null;
   isLoading: boolean;
   isLoggedIn: boolean;
-  setIsLoading: (isLoading: boolean) => void;
-  setUser: (user: User | null) => void;
-  setIsLoggedIn: (isLoggedIn: boolean) => void;
+  user: User | null;
+  setIsLoading: any;
+  setIsLoggedIn: any;
+  setUser: any;
 }>({
-  user: null,
   isLoading: true,
   isLoggedIn: false,
+  user: null,
   setIsLoading: () => {},
-  setUser: () => {},
   setIsLoggedIn: () => {},
+  setUser: () => {},
 });
 
 export const AuthProvider = ({ children }, props) => {
@@ -52,10 +52,10 @@ export const AuthProvider = ({ children }, props) => {
   }, []);
 
   const loadUser = async () => {
-    // middleware is ran before this code even on initial load. So tokens should be verified, in SS, and in axios headers already
+    // middleware is ran before this code even on initial load. So token should be in axios header if they are in SS
     try {
       const userId = await getSecureStoreUID();
-      if (Boolean(userId)) {
+      if (userId) {
         const result = await apiClient.get(`api/users/user_by_id/${userId}/`);
         if (result.status === 200) {
           setUser(result?.data);
@@ -63,9 +63,11 @@ export const AuthProvider = ({ children }, props) => {
           setIsLoggedIn(true);
         }
         return result?.data as User;
+      } else {
+        setIsLoading(false);
       }
     } catch (error) {
-      console.error('loadUser error: ', error);
+      console.warn('No userId found in Secure Store: ', error);
       setIsLoading(false);
       return null;
     }
