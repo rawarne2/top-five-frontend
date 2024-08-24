@@ -7,9 +7,8 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/top5-logo.png",
+      "resizeMode": "cover"
     },
     "ios": {
       "supportsTablet": true,
@@ -29,7 +28,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "" // TODO: get projectId from env
+        "projectId": "f2078b61-4c9e-4e0b-b5a5-1218cb61a8ed"
       }
     }
   }
