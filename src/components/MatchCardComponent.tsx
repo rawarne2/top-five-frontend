@@ -53,7 +53,7 @@ const MatchCardComponent = ({ data, isTop5, index }) => {
 
 const styles = StyleSheet.create({
   card: {
-    margin: 2,
+    margin: 1,
     height: 88,
     justifyContent: 'center',
     borderWidth: 2,

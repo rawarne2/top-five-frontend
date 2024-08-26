@@ -1,93 +1,156 @@
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, Image } from 'react-native';
 import { Button, Text, TextInput, useTheme } from 'react-native-paper';
+import { useForm, Controller } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
-import { login } from '../utils/authHelpers';
-import LoadingScreen from './LoadingScreen';
+import { useLogin } from '../hooks/mutations';
+import { useQueryClient } from '@tanstack/react-query';
 
 function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const { setUser, setIsLoggedIn } = useAuth();
   const theme = useTheme();
-
-  const handleLogin = async () => {
-    // show spinner if loading
-    setIsLoggingIn(true);
-    try {
-      const loginResult = await login(email, password);
-      if (loginResult) {
-        console.log({ loginResult });
-        setUser(loginResult.user);
-        setIsLoggedIn(true);
-        setErrorMessage('');
-      } else {
-        console.log('Invalid email or password.');
-        setErrorMessage('Invalid email or password.');
-      }
-    } catch (error) {
-      setErrorMessage('An error occurred. Please try again.');
-    } finally {
-      setIsLoggingIn(false);
-    }
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+  const queryClient = useQueryClient();
+  const login = useLogin(queryClient, useAuth);
+  const onSubmit = async (data) => {
+    await login.mutate({ email: data.email, password: data.password });
   };
-
-  if (isLoggingIn) {
-    return <LoadingScreen />;
-  }
-
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder='Email'
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize={'none'}
+    <View
+      style={{
+        marginTop: 40,
+        paddingHorizontal: 20,
+        flexDirection: 'column',
+      }}
+    >
+      <Image
+        source={require('../../assets/top5-logo.png')}
+        style={styles.image}
       />
-      <TextInput
-        style={styles.input}
-        placeholder='Password'
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Text style={{ color: theme.colors.error, padding: 4 }}>
-        {errorMessage}
-      </Text>
-      <Button onPress={handleLogin} mode='contained-tonal'>
-        Login
-      </Button>
+      <View style={styles.form}>
+        <Controller
+          control={control}
+          rules={{
+            required: 'Email is required',
+            pattern: { value: /^\S+@\S+$/i, message: 'Invalid email' },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={{
+                ...styles.input,
+                borderBottomColor: theme.colors.secondary,
+              }}
+              placeholder='Email'
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize='none'
+              keyboardType='email-address'
+              error={!!errors.email}
+              autoCorrect={false}
+              textContentType='emailAddress'
+              testID='email-input'
+            />
+          )}
+          name='email'
+          shouldUnregister
+        />
+        {errors.email && (
+          <Text style={{ color: theme.colors.error }}>
+            {errors.email.message}
+          </Text>
+        )}
+        <Controller
+          control={control}
+          rules={{
+            required: 'Password is required',
+            minLength: {
+              value: 6,
+              message: 'Password must be at least 6 characters',
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={{
+                ...styles.input,
+                borderBottomColor: theme.colors.secondary,
+              }}
+              placeholder='Password'
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              secureTextEntry
+              error={!!errors.password}
+              autoCorrect={false}
+              keyboardType='default'
+              textContentType='password'
+              testID='password-input'
+            />
+          )}
+          name='password'
+        />
+        {errors.password && (
+          <Text style={{ color: theme.colors.error }}>
+            {errors.password.message}
+          </Text>
+        )}
+        <Button
+          onPress={handleSubmit(onSubmit)}
+          mode='contained-tonal'
+          style={{
+            marginTop: 8,
+          }}
+          testID='login-button'
+        >
+          {'Login'}
+        </Button>
+        <Button
+          onPress={handleSubmit(() => console.log('signup'))}
+          mode='contained-tonal'
+          style={{
+            marginVertical: 4,
+          }}
+          testID='signup-button'
+        >
+          {'Sign Up'}
+        </Button>
+      </View>
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 24,
+    margin: 20,
+    height: '100%',
+  },
+  scrollContainer: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  scrollView: {
+    paddingTop: 0,
+  },
+  form: {
+    paddingBottom: 0,
+  },
+  image: {
+    width: '100%',
+    height: 240,
   },
   input: {
-    width: '80%',
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
+    height: 36,
+    borderBottomWidth: 2,
+    padding: 4,
     backgroundColor: 'white',
-  },
-  modal: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalText: {
-    fontSize: 20,
-    paddingTop: 10,
-    paddingHorizontal: 10,
+    marginBottom: 4,
   },
 });
 

@@ -15,9 +15,9 @@ const TabNavigator = () => {
       activeColor={colors.secondary}
       activeIndicatorStyle={{ backgroundColor: colors.primary }}
       barStyle={{ height: 80 }}
+      shifting
     >
       <Tab.Screen
-        key={1}
         name='Profile'
         component={ProfileScreen}
         options={{
@@ -28,7 +28,6 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        key={2}
         name='SwipeCards'
         component={SwipeCards}
         options={{
@@ -39,7 +38,6 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        key={3}
         name='Matches'
         component={MatchesScreen}
         options={{

@@ -4,21 +4,15 @@
 - This project was created with blank `create-expo-app` using TypeScript
 
 
+Screen recording of recent progress
+<video width="320" height="240" controls>
+  <source src="https://s3.us-east-2.amazonaws.com/rashaunwarner.com/top5-screen-recording.mp4" type="video/mp4">
+</video>
+
 ### Main Tech Stack (so far)
 - React Native
 - Expo
 - TypeScript
 - React Navigation
 - Tanstack React Query
-
-
-### Current Progress (most recent to least)
-- [x] Manage login and loading status
-- [x] Stores JTWs in Expo Secure Store on login
-- [x] Login functional
-- [x] React Context setup
-- [x] Axios client setup
-- [x] basic Login Screen created
-- [x] bottom tab navigation functional
-- [x] project created
-
+- React Native Paper
