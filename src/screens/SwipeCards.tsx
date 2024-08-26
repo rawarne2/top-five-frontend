@@ -1,19 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-
 import Swiper from 'react-native-deck-swiper';
-import { useAuth } from '../contexts/AuthContext';
-import usersCardData from '../data/usersCardData.json';
 import { useTheme } from 'react-native-paper';
+import { useFetchPotentialMatches } from '../hooks/queries';
 
-const NoMoreCards = () => {
-  console.log('No more cards');
-  return (
-    <View style={styles.noMoreCards}>
-      <Text>No more cards</Text>
-    </View>
-  );
-};
+const NoMoreCards = () => (
+  <View style={styles.noMoreCards}>
+    <Text>No more potential matches</Text>
+  </View>
+);
 
 const Card = ({ cardData }: any) => (
   <View style={styles.card}>
@@ -26,72 +21,106 @@ const Card = ({ cardData }: any) => (
 );
 
 export function SwipeCards() {
-  const { user } = useAuth();
   const theme = useTheme();
 
-  const [cards, setCards] = useState(usersCardData.users);
-  const [hasCards, setHasCards] = useState(usersCardData.users.length > 0);
-  const onSwiped = () => {
-    setCards((prevCards) => prevCards.slice(1));
-  };
-  const handleYup = () => {
-    console.log('yup');
-  };
-  const handleNope = () => {
-    console.log('nope');
+  const {
+    data: cards, // using static data for development for now
+    isLoading,
+    isError,
+  } = useFetchPotentialMatches();
+
+  const handleYup = (cardIndex: number) => {
+    console.log('Liked user:', cards[cardIndex]);
+    // Implement like logic here
   };
 
-  return !hasCards ? (
-    <NoMoreCards />
-  ) : (
+  const handleNope = (cardIndex: number) => {
+    console.log('Disliked user:', cards[cardIndex]);
+    // Implement dislike logic here
+  };
+  if (isLoading) return <Text>Loading...</Text>;
+  if (isError) return <Text>Error loading potential matches</Text>;
+
+  return (
     <View style={styles.container}>
-      <Swiper
-        cards={cards}
-        renderCard={(cardData) => <Card cardData={cardData} />}
-        stackSize={2}
-        onSwiped={onSwiped}
-        onSwipedAll={() => setHasCards(false)}
-        onSwipedRight={handleYup}
-        onSwipedLeft={handleNope}
-        verticalSwipe={false}
-        cardIndex={0}
-        keyExtractor={(data) => data?.userId?.toString()}
-        key={cards.length}
-        backgroundColor={theme.colors.background}
+      <Image
+        source={require('../../assets/top5-logo.png')}
+        style={styles.logo}
       />
-      <Text style={styles.text}>Hello {user?.first_name}!!!</Text>
+      <View style={styles.swiperContainer}>
+        {cards?.length ? (
+          <Swiper
+            cards={cards}
+            renderCard={(cardData) => <Card cardData={cardData} />}
+            onSwipedRight={handleYup}
+            onSwipedLeft={handleNope}
+            cardIndex={0}
+            stackSize={3}
+            backgroundColor={theme.colors.background}
+            overlayLabels={{
+              left: {
+                title: 'NOPE',
+                style: {
+                  label: {
+                    backgroundColor: theme.colors.error,
+                    color: 'white',
+                  },
+                },
+              },
+              right: {
+                title: 'LIKE',
+                style: {
+                  label: {
+                    backgroundColor: theme.colors.tertiary,
+                    color: 'white',
+                    textAlight: 'left',
+                  },
+                },
+              },
+            }}
+            overlayOpacityHorizontalThreshold={0.2}
+          />
+        ) : (
+          <NoMoreCards />
+        )}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    alignItems: 'center',
     borderRadius: 20,
-    height: 600,
+    height: 560,
     overflow: 'hidden',
     borderColor: 'grey',
     backgroundColor: 'white',
     borderWidth: 1,
-    padding: 20,
-    zIndex: 1,
   },
   thumbnail: {
-    width: 300,
-    height: 300,
+    width: '100%',
+    height: '80%',
   },
   text: {
     fontSize: 20,
     paddingTop: 10,
     paddingBottom: 10,
   },
-  noMoreCards: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  noMoreCards: {},
   container: {
-    flex: 1,
+    flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'flex-start',
+    height: '100%',
+  },
+  logo: {
+    width: '25%',
+    height: 70,
+  },
+  swiperContainer: {
+    width: '100%',
+    height: '90%',
+    marginTop: -30, // TODO: crop logo and remove this
+    zIndex: -1,
   },
 });

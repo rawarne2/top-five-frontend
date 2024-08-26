@@ -1,15 +1,15 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { DefaultTheme, PaperProvider } from 'react-native-paper';
+import { PaperProvider } from 'react-native-paper';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './src/contexts/AuthContext';
 import MainComponents from './src/components/MainComponents';
 import { StyleSheet, View } from 'react-native';
 import { customTheme } from './src/constants/customTheme';
 
-export default function App() {
-  const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 
+export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
