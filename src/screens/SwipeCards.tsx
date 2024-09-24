@@ -1,87 +1,147 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import Swiper from 'react-native-deck-swiper';
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  FlatList,
+  Animated,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useFetchPotentialMatches } from '../hooks/queries';
 
-const NoMoreCards = () => (
-  <View style={styles.noMoreCards}>
-    <Text>No more potential matches</Text>
-  </View>
-);
+const { width, height } = Dimensions.get('window');
 
-const Card = ({ cardData }: any) => (
-  <View style={styles.card}>
-    <Image style={styles.thumbnail} source={{ uri: cardData?.image }} />
-    <Text style={styles.text}>
-      {cardData?.first_name} {cardData?.last_name}, {cardData?.age}
-    </Text>
-    <Text style={styles.text}>{cardData?.career}</Text>
-  </View>
-);
+const Card = ({ cardData, onSelectSection, selectedSection }) => {
+  const theme = useTheme();
+
+  const sections = [
+    { id: 'image', title: 'Photo' },
+    { id: 'name', title: 'Name' },
+    { id: 'career', title: 'Career' },
+    { id: 'bio', title: 'Bio' },
+  ];
+
+  const renderItem = ({ item }) => {
+    // for some reason, the previous cardData is still logged out after going to next. Use this when
+    // enabling swipe back to previous card
+    console.log('cardData: ', cardData);
+    return (
+      <TouchableOpacity
+        style={[
+          styles.section,
+          selectedSection === item.id && {
+            borderColor: theme.colors.primary,
+            borderWidth: 2,
+          },
+        ]}
+        onPress={() => onSelectSection(item.id)}
+      >
+        {item.id === 'image' ? (
+          <Image
+            style={styles.thumbnail}
+            source={{ uri: cardData?.image }}
+            key={cardData.userId}
+            // when there are multiple images change the key to use the image id to avoid duplication bugs. using userId would not work
+          />
+        ) : (
+          <Text style={styles.text}>
+            {item.id === 'name'
+              ? `${cardData?.first_name} ${cardData?.last_name}, ${cardData?.age}`
+              : cardData?.[item.id]}
+          </Text>
+        )}
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <FlatList
+      data={sections}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id}
+      style={styles.card}
+      contentContainerStyle={styles.cardContent}
+    />
+  );
+};
 
 export function SwipeCards() {
   const theme = useTheme();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedSection, setSelectedSection] = useState(null);
+  const [showWarning, setShowWarning] = useState(false);
+  const position = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+  const { data: cards, isLoading, isError } = useFetchPotentialMatches();
 
-  const {
-    data: cards, // using static data for development for now
-    isLoading,
-    isError,
-  } = useFetchPotentialMatches();
+  useEffect(() => {
+    position.setValue({ x: 0, y: 0 });
+  }, [currentIndex]);
 
-  const handleYup = (cardIndex: number) => {
-    console.log('Liked user:', cards[cardIndex]);
-    // Implement like logic here
+  const handleSelectSection = (sectionId) => {
+    setSelectedSection(sectionId);
+    setShowWarning(false);
   };
 
-  const handleNope = (cardIndex: number) => {
-    console.log('Disliked user:', cards[cardIndex]);
-    // Implement dislike logic here
+  const handleSwipe = (direction) => {
+    if (!selectedSection) {
+      setShowWarning(true);
+      setTimeout(() => setShowWarning(false), 3000);
+      return;
+    }
+    console.log(
+      `Swiped ${direction} on user: ${cards[currentIndex].first_name}, Selected section: ${selectedSection}`
+    );
+
+    Animated.timing(position, {
+      toValue: { x: direction === 'right' ? width : -width, y: 0 },
+      duration: 300,
+      useNativeDriver: false,
+    }).start(() => {
+      setSelectedSection(null);
+      setCurrentIndex((prev) => prev + 1);
+      position.setValue({ x: 0, y: 0 });
+    });
   };
+
   if (isLoading) return <Text>Loading...</Text>;
   if (isError) return <Text>Error loading potential matches</Text>;
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../../assets/top5-logo.png')}
-        style={styles.logo}
-      />
-      <View style={styles.swiperContainer}>
-        {cards?.length ? (
-          <Swiper
-            cards={cards}
-            renderCard={(cardData) => <Card cardData={cardData} />}
-            onSwipedRight={handleYup}
-            onSwipedLeft={handleNope}
-            cardIndex={0}
-            stackSize={3}
-            backgroundColor={theme.colors.background}
-            overlayLabels={{
-              left: {
-                title: 'NOPE',
-                style: {
-                  label: {
-                    backgroundColor: theme.colors.error,
-                    color: 'white',
-                  },
-                },
-              },
-              right: {
-                title: 'LIKE',
-                style: {
-                  label: {
-                    backgroundColor: theme.colors.tertiary,
-                    color: 'white',
-                    textAlight: 'left',
-                  },
-                },
-              },
-            }}
-            overlayOpacityHorizontalThreshold={0.2}
+      <View style={styles.cardContainer}>
+        <Animated.View style={[styles.cardWrapper, position.getLayout()]}>
+          <Card
+            cardData={cards[currentIndex]}
+            onSelectSection={handleSelectSection}
+            selectedSection={selectedSection}
           />
-        ) : (
-          <NoMoreCards />
+        </Animated.View>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={{ ...styles.button, backgroundColor: theme.colors.error }}
+            onPress={() => handleSwipe('left')}
+          >
+            <Text style={styles.buttonText}>Nope</Text>
+          </TouchableOpacity>
+          <Image
+            source={require('../../assets/top5-logo-square.png')}
+            style={styles.logo}
+          />
+          <TouchableOpacity
+            style={{ ...styles.button, backgroundColor: theme.colors.primary }}
+            onPress={() => handleSwipe('right')}
+          >
+            <Text style={styles.buttonText}>Like</Text>
+          </TouchableOpacity>
+        </View>
+        {showWarning && (
+          <View style={styles.warning}>
+            <Text style={styles.warningText}>Select a section</Text>
+          </View>
         )}
       </View>
     </View>
@@ -89,38 +149,86 @@ export function SwipeCards() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  logo: {
+    width: 80,
+    height: 80,
+  },
+  cardContainer: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+  },
+  cardWrapper: {
+    width: width - 40,
+    height: height - 250,
+    marginTop: 20,
+  },
   card: {
+    width: '100%',
+    height: '100%',
     borderRadius: 20,
-    height: 560,
-    overflow: 'hidden',
+    borderWidth: 2,
     borderColor: 'grey',
     backgroundColor: 'white',
-    borderWidth: 1,
+    overflow: 'hidden',
+  },
+  cardContent: {
+    alignItems: 'center',
+  },
+  section: {
+    width: '100%',
+    alignItems: 'center',
+    padding: 10,
+    marginBottom: 10,
   },
   thumbnail: {
-    width: '100%',
-    height: '80%',
+    width: width - 60,
+    height: width - 60,
+    borderRadius: 20,
   },
   text: {
     fontSize: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingVertical: 10,
+    textAlign: 'center',
   },
-  noMoreCards: {},
-  container: {
-    flexDirection: 'column',
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '90%',
+    height: 80,
+    marginVertical: 8,
+    alignContent: 'center',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    height: '100%',
   },
-  logo: {
-    width: '25%',
-    height: 70,
+  button: {
+    // flex: 1,
+    justifyContent: 'center',
+    // alignItems: 'center',
+    width: width / 2 - 70,
+    height: 80,
+    borderRadius: 20,
+    marginHorizontal: 10,
   },
-  swiperContainer: {
-    width: '100%',
-    height: '90%',
-    marginTop: -30, // TODO: crop logo and remove this
-    zIndex: -1,
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  warning: {
+    position: 'absolute',
+    top: 10,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    padding: 10,
+    alignItems: 'center',
+  },
+  warningText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
