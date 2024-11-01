@@ -25,9 +25,6 @@ const Card = ({ cardData, onSelectSection, selectedSection }) => {
   ];
 
   const renderItem = ({ item }) => {
-    // for some reason, the previous cardData is still logged out after going to next. Use this when
-    // enabling swipe back to previous card
-    console.log('cardData: ', cardData);
     return (
       <TouchableOpacity
         style={[
@@ -35,6 +32,8 @@ const Card = ({ cardData, onSelectSection, selectedSection }) => {
           selectedSection === item.id && {
             borderColor: theme.colors.primary,
             borderWidth: 2,
+            borderRadius: 20,
+            backgroundColor: theme.colors.primaryContainer,
           },
         ]}
         onPress={() => onSelectSection(item.id)}
@@ -112,11 +111,12 @@ export function SwipeCards() {
   return (
     <View style={styles.container}>
       <View style={styles.cardContainer}>
-        <Animated.View style={[styles.cardWrapper, position.getLayout()]}>
+        <Animated.View style={[styles.cardWrapper, position?.getLayout()]}>
           <Card
             cardData={cards[currentIndex]}
             onSelectSection={handleSelectSection}
             selectedSection={selectedSection}
+            key={cards[currentIndex].userId}
           />
         </Animated.View>
 

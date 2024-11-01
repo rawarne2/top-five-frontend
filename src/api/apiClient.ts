@@ -8,7 +8,7 @@ const apiClient = axios.create({
     // baseURL: "https://blessed-constantly-hornet.ngrok-free.app/",
     // baseURL: "http://127.0.0.1:8000/",
 
-    baseURL: "http://192.168.1.142:8000/", // external device: run this in backend terminal while in virtual env: python manage.py runserver 192.168.1.142:8000
+    baseURL: "http://192.168.4.22:8000/", // external device: run this in backend terminal while in virtual env: python manage.py runserver 192.168.4.22:8000
     headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

@@ -64,18 +64,14 @@ function LoginScreen() {
           shouldUnregister
         />
         {errors.email && (
-          <Text style={{ color: theme.colors.error }}>
+          <Text style={{ color: theme.colors.error }} testID='email-error'>
             {errors.email.message}
           </Text>
         )}
         <Controller
           control={control}
           rules={{
-            required: 'Password is required',
-            minLength: {
-              value: 6,
-              message: 'Password must be at least 6 characters',
-            },
+            required: 'Please enter your password',
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
@@ -98,7 +94,7 @@ function LoginScreen() {
           name='password'
         />
         {errors.password && (
-          <Text style={{ color: theme.colors.error }}>
+          <Text style={{ color: theme.colors.error }} testID='password-error'>
             {errors.password.message}
           </Text>
         )}
