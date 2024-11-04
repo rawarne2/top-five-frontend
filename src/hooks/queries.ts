@@ -9,7 +9,7 @@ export interface UserProfile {
     user_id: number;
     bio?: string;
     interests?: number[]; // Assuming Interest is referenced by IDs
-    picture_urls?: string[];
+    picture_urls?: string[]; // URLs now include "?t=timestamp"
     gender: 'male' | 'female' | 'non-binary';
     location: string;
     preferred_gender?: 'male' | 'female' | 'non-binary' | null;

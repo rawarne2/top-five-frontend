@@ -1,6 +1,6 @@
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import ProfileScreen from '../screens/ProfileScreen';
+import { ProfileScreen } from '../screens/ProfileScreen';
 import { SwipeCards } from '../screens/SwipeCards';
 import MatchesScreen from '../screens/MatchesScreen';
 import { useTheme } from 'react-native-paper';

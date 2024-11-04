@@ -4,7 +4,6 @@ import { Button, Text, TextInput, useTheme } from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
 import { useLogin } from '../hooks/mutations';
-import { useQueryClient } from '@tanstack/react-query';
 
 function LoginScreen() {
   const theme = useTheme();
@@ -18,8 +17,7 @@ function LoginScreen() {
       password: '',
     },
   });
-  const queryClient = useQueryClient();
-  const login = useLogin(queryClient, useAuth);
+  const login = useLogin(useAuth);
   const onSubmit = async (data) => {
     await login.mutate({ email: data.email, password: data.password });
   };

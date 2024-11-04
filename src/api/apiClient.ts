@@ -22,7 +22,6 @@ apiClient.interceptors.request.use(async (config) => {
     if (config.url === 'api/token/refresh/' || config.url === 'api/users/login/') {
         return config;
     }
-    console.log({ config })
 
     const accessToken = await getSSAccessToken();
     if (accessToken && isValidToken(accessToken)) {

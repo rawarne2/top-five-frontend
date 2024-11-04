@@ -1,72 +1,63 @@
-import { Image, StyleSheet, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
-import * as ImagePicker from 'expo-image-picker';
+import React from 'react';
+import { StyleSheet, ScrollView, View } from 'react-native';
+import { Button, Text, useTheme } from 'react-native-paper';
 import { useLogout } from '../hooks/mutations';
-import React, { useState } from 'react';
+import { PictureGridComponent } from '../components/PictureGridComponent';
 
-const ProfileScreen = () => {
-  const [selectedImages, setSelectedImages] = useState([]);
+// Main profile screen component for user profile management
+export const ProfileScreen = () => {
+  const theme = useTheme();
   const logout = useLogout();
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-      allowsEditing: true,
-      orderedSelection: true,
-    });
-    console.log({ result });
-
-    if (!result.canceled) {
-      setSelectedImages([...selectedImages, result.assets[0]]);
-    }
-  };
-  console.log('selectedImages: ', selectedImages);
 
   const handleLogout = async () => {
     logout.mutate();
   };
+
   return (
-    <View style={styles.container}>
-      <Text variant='titleLarge'>Profile!</Text>
-      <Button
-        onPress={handleLogout}
-        mode='contained-tonal'
-        style={{ marginVertical: 20 }}
-      >
-        Logout
-      </Button>
-      <Button mode='contained-tonal' onPress={pickImage}>
-        Upload Photos
-      </Button>
-      <View style={styles.imageContainer}>
-        {selectedImages.map((image) => (
-          <Image
-            key={image.uri}
-            source={{ uri: image.uri }}
-            style={styles.image}
-          />
-        ))}
+    <ScrollView
+      contentContainerStyle={styles.scrollContainer}
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={styles.header}>
+        <Text variant='headlineMedium' style={styles.title}>
+          Profile
+        </Text>
       </View>
-    </View>
+
+      <View style={styles.content}>
+        <PictureGridComponent />
+
+        <Button
+          onPress={handleLogout}
+          mode='contained-tonal'
+          style={styles.logoutButton}
+          icon='logout'
+        >
+          Logout
+        </Button>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  scrollContainer: {
+    flexGrow: 1,
+    paddingBottom: 20,
+  },
+  header: {
+    padding: 16,
     alignItems: 'center',
-    justifyContent: 'center',
+    marginBottom: 8,
   },
-  imageContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 20,
+  title: {
+    fontWeight: '600',
   },
-  image: {
-    width: 100,
-    height: 100,
-    margin: 5,
+  content: {
+    flex: 1,
+    paddingHorizontal: 8,
+  },
+  logoutButton: {
+    marginTop: 24,
   },
 });
-export default ProfileScreen;
