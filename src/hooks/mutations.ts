@@ -81,26 +81,34 @@ export const useLogin = (useAuth: () => AuthContextType) => {
             email: string;
             password: string;
         }): Promise<LoginResponseType | null> => {
-            const response = await apiClient.post('api/users/login/', credentials);
-            if (!response) return null;
+            try {
+                const response = await apiClient.post('api/users/login/', credentials);
+                if (!response) return null;
 
-            const { access, refresh } = response.data.tokens;
-            const user = response.data.user;
+                const { access, refresh } = response?.data?.tokens;
+                const user = response.data.user;
 
-            await saveSecureStoreJWTs(access, refresh);
-            await saveUserToSecureStore({
-                id: user.id,
-                first_name: user.first_name,
-                last_name: user.last_name,
-                email: user.email,
-            });
+                await saveSecureStoreJWTs(access, refresh);
+                await saveUserToSecureStore({
+                    id: user.id,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    email: user.email,
+                });
 
-            return { user, tokens: { access, refresh } };
+                return { user, tokens: { access, refresh } };
+            } catch (error) {
+                console.error('useLogin mutation error: ', error);
+                return null;
+            }
         },
         onSuccess: (user) => {
             queryClient.setQueryData(['user'], user);
             saveSecureStoreJWTs(user.tokens.access, user.tokens.refresh);
             setIsLoggedIn(true);
+        },
+        onError: (error) => {
+            console.error('Error logging in: ', error);
         },
     });
 };
