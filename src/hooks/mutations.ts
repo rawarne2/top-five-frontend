@@ -33,7 +33,7 @@ import { UserProfile } from '../hooks/queries';
 
 const uploadPhotos = async (photos: PhotoUpload[]): Promise<UserProfile> => {
     const userId = await getSecureStoreUID();
-    const photoIndexes = photos.map(photo => photo.key);
+    const photoIndexes = photos.map(photo => photo?.key);
 
     try {
         // Get pre-signed URLs from backend

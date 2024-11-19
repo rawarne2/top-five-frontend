@@ -17,6 +17,7 @@ export const ProfileScreen = () => {
     <ScrollView
       contentContainerStyle={styles.scrollContainer}
       showsVerticalScrollIndicator={false}
+      style={{ backgroundColor: theme.colors.background }}
     >
       <View style={styles.header}>
         <Text variant='headlineMedium' style={styles.title}>

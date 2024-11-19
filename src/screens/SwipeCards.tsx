@@ -36,6 +36,7 @@ const Card = ({ cardData, onSelectSection, selectedSection }) => {
             backgroundColor: theme.colors.primaryContainer,
           },
         ]}
+        key={item.id}
         onPress={() => onSelectSection(item.id)}
       >
         {item.id === 'image' ? (
@@ -60,7 +61,7 @@ const Card = ({ cardData, onSelectSection, selectedSection }) => {
     <FlatList
       data={sections}
       renderItem={renderItem}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item?.id}
       style={styles.card}
       contentContainerStyle={styles.cardContent}
     />
@@ -109,14 +110,16 @@ export function SwipeCards() {
   if (isError) return <Text>Error loading potential matches</Text>;
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{ ...styles.container, backgroundColor: theme.colors.background }}
+    >
       <View style={styles.cardContainer}>
         <Animated.View style={[styles.cardWrapper, position?.getLayout()]}>
           <Card
             cardData={cards[currentIndex]}
             onSelectSection={handleSelectSection}
             selectedSection={selectedSection}
-            key={cards[currentIndex].userId}
+            key={cards[currentIndex]?.userId}
           />
         </Animated.View>
 

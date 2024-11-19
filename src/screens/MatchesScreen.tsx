@@ -1,6 +1,13 @@
 import React from 'react';
 import { StyleSheet, View, VirtualizedList } from 'react-native';
-import { Card, Divider, Text, useTheme } from 'react-native-paper';
+import {
+  Card,
+  Divider,
+  Text,
+  useTheme,
+  Headline,
+  Title,
+} from 'react-native-paper';
 import MatchCardComponent from '../components/MatchCardComponent';
 import { useFetchMatches } from '../hooks/queries';
 
@@ -27,28 +34,13 @@ const MatchesScreen = () => {
 
   const ListHeaderComponent = () => (
     <>
-      <Card.Title title='Top 5 Matches' titleStyle={styles.titleText} />
+      <Headline style={styles.titleText}>Top 5 Matches</Headline>
       {!matches.isLoading &&
         matches.data
           ?.slice(0, 5)
           .map((item, i) => renderItem({ item, index: i }))}
       <Divider />
-      <Card.Title
-        title='Recent Matches'
-        titleStyle={styles.titleText}
-        right={() => (
-          <Text
-            style={{
-              ...styles.titleText,
-              color: theme.colors.error,
-              fontSize: 18,
-              paddingRight: 8,
-            }}
-          >
-            Time Left
-          </Text>
-        )}
-      />
+      <Headline>Recent Matches</Headline>
       {!matches.isLoading &&
         matches.data?.slice(5).map((item, i) => renderItem({ item, index: i }))}
     </>
@@ -58,33 +50,30 @@ const MatchesScreen = () => {
   if (matches.isError) return <Text>Error loading matches</Text>;
 
   return (
-    <View style={styles.container}>
-      <Card
-        mode='elevated'
-        style={{ backgroundColor: theme.colors.background }}
-      >
-        <VirtualizedList
-          data={matches}
-          initialNumToRender={10}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-          getItemCount={getItemCount}
-          getItem={getItem}
-          ListHeaderComponent={ListHeaderComponent}
-          collapsable // android only
-        />
-      </Card>
+    <View style={{ backgroundColor: theme.colors.background, flex: 1 }}>
+      <VirtualizedList
+        data={matches}
+        initialNumToRender={10}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+        getItemCount={getItemCount}
+        getItem={getItem}
+        ListHeaderComponent={ListHeaderComponent}
+        collapsable // android only
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  // container: {
+  //   flex: 1,
+  // },
   titleText: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '600',
+    paddingInline: 8,
+    textAlign: 'left',
   },
 });
 

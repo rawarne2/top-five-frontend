@@ -1,4 +1,4 @@
-import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { SwipeCards } from '../screens/SwipeCards';
@@ -6,16 +6,19 @@ import MatchesScreen from '../screens/MatchesScreen';
 import { useTheme } from 'react-native-paper';
 
 const TabNavigator = () => {
-  const Tab = createMaterialBottomTabNavigator();
+  const Tab = createBottomTabNavigator();
   const { colors } = useTheme();
 
   return (
     <Tab.Navigator
+      id={'TabNavigator' as undefined}
       initialRouteName='SwipeCards'
-      activeColor={colors.secondary}
-      activeIndicatorStyle={{ backgroundColor: colors.primary }}
-      barStyle={{ height: 80 }}
-      shifting
+      screenOptions={{
+        tabBarActiveTintColor: colors.secondary,
+        headerShown: false,
+        tabBarStyle: { height: 80, backgroundColor: colors.onSurfaceVariant },
+        tabBarLabelStyle: { fontSize: 14 },
+      }}
     >
       <Tab.Screen
         name='Profile'
@@ -23,18 +26,20 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name='bell' color={color} size={26} />
+            <MaterialCommunityIcons name='bell' color={color} size={28} />
           ),
+          animation: 'shift',
         }}
       />
       <Tab.Screen
         name='SwipeCards'
         component={SwipeCards}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Swiper',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name='home' color={color} size={26} />
+            <MaterialCommunityIcons name='heart' color={color} size={28} />
           ),
+          animation: 'shift',
         }}
       />
       <Tab.Screen
@@ -43,8 +48,9 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: 'Matches',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name='account' color={color} size={26} />
+            <MaterialCommunityIcons name='account' color={color} size={28} />
           ),
+          animation: 'shift',
         }}
       />
     </Tab.Navigator>

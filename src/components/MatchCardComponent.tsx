@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
   },
   rightContent: {
     flex: 1,
