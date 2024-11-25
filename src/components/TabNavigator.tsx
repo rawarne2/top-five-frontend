@@ -26,7 +26,7 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name='bell' color={color} size={28} />
+            <MaterialCommunityIcons name='account' color={color} size={28} />
           ),
           animation: 'shift',
         }}
@@ -37,7 +37,11 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: 'Swiper',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name='heart' color={color} size={28} />
+            <MaterialCommunityIcons
+              name='cards-playing-heart-multiple'
+              color={color}
+              size={28}
+            />
           ),
           animation: 'shift',
         }}
@@ -48,7 +52,7 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: 'Matches',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name='account' color={color} size={28} />
+            <MaterialCommunityIcons name='heart' color={color} size={28} />
           ),
           animation: 'shift',
         }}

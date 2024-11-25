@@ -29,9 +29,9 @@ const findUrlByPhotoNumber = (urls: string[], photoNumber: number): string | nul
     return urls.find(url => regex.test(url)) || null;
 };
 
-import { UserProfile } from '../hooks/queries';
+import { Profile } from '../hooks/queries';
 
-const uploadPhotos = async (photos: PhotoUpload[]): Promise<UserProfile> => {
+const uploadPhotos = async (photos: PhotoUpload[]): Promise<Profile> => {
     const userId = await getSecureStoreUID();
     const photoIndexes = photos.map(photo => photo?.key);
 
@@ -86,15 +86,10 @@ export const useLogin = (useAuth: () => AuthContextType) => {
                 if (!response) return null;
 
                 const { access, refresh } = response?.data?.tokens;
-                const user = response.data.user;
+                const user: User = response.data.user;
 
                 await saveSecureStoreJWTs(access, refresh);
-                await saveUserToSecureStore({
-                    id: user.id,
-                    first_name: user.first_name,
-                    last_name: user.last_name,
-                    email: user.email,
-                });
+                await saveUserToSecureStore(user);
 
                 return { user, tokens: { access, refresh } };
             } catch (error) {
@@ -132,11 +127,17 @@ export const useLogout = () => {
     });
 };
 
-export const useUpdateProfile = (userId: number, profileData: any) => {
+export const useUpdateProfile = () => {
+    const queryClient = useQueryClient();
+
     return useMutation({
-        mutationKey: ['updateProfile'],
-        mutationFn: async () => {
-            await apiClient.put(`/update_profile/${userId}/`, profileData);
+        mutationFn: async (profileData: Partial<Profile>) => {
+            const userId = await getSecureStoreUID();
+            const response = await apiClient.patch(`/api/users/update_profile/${userId}/`, profileData);
+            return response.data;
+        },
+        onSuccess: (data) => {
+            queryClient.setQueryData(['profile'], data);
         },
     });
 };
@@ -148,10 +149,8 @@ export const useUploadPhotosMutation = () => {
         mutationKey: ['uploadPhotos'],
         mutationFn: ({ photos }: { photos: PhotoUpload[] }) => uploadPhotos(photos),
         onSuccess: (updatedProfile) => {
-            // Immediately update the cache with new data
-            queryClient.setQueryData(['userProfile'], updatedProfile);
-            // Also invalidate to ensure consistency
-            queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+            queryClient.setQueryData(['profile'], updatedProfile);
+            queryClient.invalidateQueries({ queryKey: ['profile'] });
         },
         onError: (error) => {
             console.error('Error uploading photos:', error);
