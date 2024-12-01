@@ -2,11 +2,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as SecureStore from 'expo-secure-store';
 import * as FileSystem from 'expo-file-system';
 import { ImagePickerAsset } from 'expo-image-picker';
-import { AuthContextType, useAuth, User } from '../contexts/AuthContext';
+import { AuthContextType, useAuth } from '../contexts/AuthContext';
 import apiClient from '../api/apiClient';
 import { deleteTokenAndUserIdFromSS, saveTokenAndUserIdToSS } from '../utils/tokenManager';
 
-type LoginResponseType = {
+type LoginResponse = {
     user: User;
     tokens: {
         access: string;
@@ -24,8 +24,9 @@ const findUrlByPhotoNumber = (urls: string[], photoNumber: number): string | nul
     return urls.find(url => regex.test(url)) || null;
 };
 
-import { Profile } from '../hooks/queries';
+
 import { getSecureStoreUID } from '../utils/secureStoreManager';
+import { User, Profile } from '../types/profile';
 
 const uploadPhotos = async (photos: PhotoUpload[]): Promise<Profile> => {
     const userId = await getSecureStoreUID();
@@ -76,7 +77,7 @@ export const useLogin = (useAuth: () => AuthContextType) => {
         mutationFn: async (credentials: {
             email: string;
             password: string;
-        }): Promise<LoginResponseType | null> => {
+        }): Promise<LoginResponse | null> => {
             try {
                 const response = await apiClient.post('api/users/login/', credentials);
                 if (!response) return null;

@@ -6,9 +6,9 @@ import { ProfileEditModal } from '../modals/ProfileEditModal';
 import { SelectField } from '../fields/SelectField';
 import { useProfileChoices } from '../../hooks/queries';
 import { useUpdateProfile } from '../../hooks/mutations';
-import type { Profile } from '../../hooks/queries';
 import isEqual from 'lodash/isEqual';
 import { CustomSurface } from '../../containers/CustomSurface';
+import { Profile } from '../../types/profile';
 
 type EditingField =
   | 'alcohol_frequency'

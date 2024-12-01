@@ -11,15 +11,6 @@ This context is used to determine if the user is logged in or not.
 if there is a valid token and a userId in the expo secure store,the context value isLoggedIn will be set to true.
 */
 
-export type User = {
-  // TODO: move to different file
-  id: number;
-  birthdate: Date;
-  first_name: string;
-  last_name: string;
-  email: string;
-};
-
 export type AuthContextType = {
   isLoggedIn: boolean;
   setIsLoggedIn: (value: boolean) => void;

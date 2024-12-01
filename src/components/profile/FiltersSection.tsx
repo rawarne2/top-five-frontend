@@ -7,9 +7,9 @@ import { ProfileEditModal } from '../modals/ProfileEditModal';
 import { SelectField } from '../fields/SelectField';
 import { useProfileChoices } from '../../hooks/queries';
 import { useUpdateProfile } from '../../hooks/mutations';
-import type { Gender, Profile } from '../../hooks/queries';
 import { AgeRangeSelector } from '../fields/AgeRangeField';
 import { CustomSurface } from '../../containers/CustomSurface';
+import { Profile, Gender } from '../../types/profile';
 
 type EditingField = 'age_range' | 'preferred_gender' | null;
 

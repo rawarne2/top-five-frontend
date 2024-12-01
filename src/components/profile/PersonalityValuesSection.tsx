@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { StyleSheet } from 'react-native';
-import { Surface, Text, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { InfoItem } from '../fields/InfoItem';
 import { ProfileEditModal } from '../modals/ProfileEditModal';
@@ -9,10 +8,10 @@ import { MultiSelectField } from '../fields/MultiSelectField';
 import { TextInputField } from '../fields/TextInputField';
 import { useProfileChoices } from '../../hooks/queries';
 import { useUpdateProfile } from '../../hooks/mutations';
-import type { Profile } from '../../hooks/queries';
 import isEqual from 'lodash/isEqual';
 import { InterestsSelector } from '../InterestsSelector';
 import { CustomSurface } from '../../containers/CustomSurface';
+import { Profile } from '../../types/profile';
 
 type EditingField =
   | 'core_values'
