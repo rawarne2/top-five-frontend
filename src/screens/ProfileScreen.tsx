@@ -14,6 +14,7 @@ import { LifestyleSection } from '../components/profile/LifeStyleSection';
 import { FiltersSection } from '../components/profile/FiltersSection';
 import { PersonalityValuesSection } from '../components/profile/PersonalityValuesSection';
 import { useFetchProfileQuery } from '../hooks/queries';
+import { CustomSurface } from '../containers/CustomSurface';
 
 export const ProfileScreen = () => {
   const theme = useTheme();
@@ -55,18 +56,9 @@ export const ProfileScreen = () => {
       </Text>
 
       <View style={styles.content}>
-        <Surface
-          style={{
-            ...styles.surface,
-            backgroundColor: theme.colors.onSurfaceVariant,
-          }}
-          elevation={5}
-        >
-          <Text variant='titleLarge' style={styles.sectionTitle}>
-            Pictures
-          </Text>
+        <CustomSurface title='Your Pictures'>
           <PictureGridComponent />
-        </Surface>
+        </CustomSurface>
 
         <BasicInfoSection profile={profile} />
         <LifestyleSection profile={profile} />
@@ -107,16 +99,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 8,
-  },
-  surface: {
-    padding: 12,
-    marginVertical: 8,
-    borderRadius: 8,
-  },
-  sectionTitle: {
-    marginBottom: 16,
-    fontWeight: '600',
-    color: 'white',
   },
   logoutButton: {
     marginTop: 24,

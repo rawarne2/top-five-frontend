@@ -9,6 +9,7 @@ import { useProfileChoices } from '../../hooks/queries';
 import { useUpdateProfile } from '../../hooks/mutations';
 import type { Gender, Profile } from '../../hooks/queries';
 import { AgeRangeSelector } from '../fields/AgeRangeField';
+import { CustomSurface } from '../../containers/CustomSurface';
 
 type EditingField = 'age_range' | 'preferred_gender' | null;
 
@@ -98,17 +99,7 @@ export const FiltersSection: React.FC<FiltersSectionProps> = ({ profile }) => {
   };
 
   return (
-    <Surface
-      style={[
-        styles.surface,
-        { backgroundColor: theme.colors.onSurfaceVariant },
-      ]}
-      elevation={5}
-    >
-      <Text variant='titleLarge' style={styles.sectionTitle}>
-        Filters
-      </Text>
-
+    <CustomSurface title='Filters'>
       <InfoItem
         icon='calendar-range'
         label='Age Range'
@@ -136,19 +127,6 @@ export const FiltersSection: React.FC<FiltersSectionProps> = ({ profile }) => {
       >
         {renderEditContent()}
       </ProfileEditModal>
-    </Surface>
+    </CustomSurface>
   );
 };
-
-const styles = StyleSheet.create({
-  surface: {
-    padding: 12,
-    marginVertical: 8,
-    borderRadius: 8,
-  },
-  sectionTitle: {
-    marginBottom: 16,
-    fontWeight: '600',
-    color: 'white',
-  },
-});

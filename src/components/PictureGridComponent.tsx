@@ -14,9 +14,10 @@ interface PhotoItem {
 const MAX_PHOTOS = 6;
 
 // Handles photo grid display and management for user profile pictures
+// Users can add, remove (in progress), and reorder photos
 export const PictureGridComponent: React.FC = () => {
   const theme = useTheme();
-  const { data: profile, isLoading, isError, refetch } = useFetchProfileQuery();
+  const { data: profile, isLoading, isError, refetch } = useFetchProfileQuery(); // needs optimization
 
   const [photos, setPhotos] = useState<PhotoItem[]>([]);
   const [loadingImageIndexes, setLoadingImageIndexes] = useState<Set<number>>(
@@ -139,9 +140,7 @@ export const PictureGridComponent: React.FC = () => {
   const canAddMore = photos.length < MAX_PHOTOS;
 
   return (
-    <View
-      style={{ ...styles.container, backgroundColor: theme.colors.surface }}
-    >
+    <View>
       <DraggableGrid
         numColumns={3}
         renderItem={renderGridItem}
@@ -149,7 +148,6 @@ export const PictureGridComponent: React.FC = () => {
         onDragRelease={handleDragRelease}
         style={{
           ...styles.grid,
-          backgroundColor: theme.colors.surface,
         }}
         onItemPress={(item) => handleImagePicker(item.key)}
         key='photo-grid'
@@ -170,23 +168,18 @@ export const PictureGridComponent: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 4,
-    borderRadius: 8,
-  },
   grid: {
     borderRadius: 20,
     padding: 4,
     height: 600,
   },
   item: {
-    width: 118,
-    height: 157,
+    width: 112, // TODO: use screen sizes
+    height: 154,
     borderRadius: 20,
     borderWidth: 2,
     overflow: 'hidden',
     position: 'relative',
-    // margin: 10,
   },
   image: {
     width: '100%',

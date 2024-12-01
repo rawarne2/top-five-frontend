@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { StyleSheet } from 'react-native';
-import { Surface, Text, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { InfoItem } from '../fields/InfoItem';
 import { ProfileEditModal } from '../modals/ProfileEditModal';
@@ -14,6 +13,7 @@ import {
 } from '../../utils/helperFunctions';
 import type { Profile } from '../../hooks/queries';
 import isEqual from 'lodash/isEqual';
+import { CustomSurface } from '../../containers/CustomSurface';
 
 type EditingField =
   | 'bio'
@@ -145,17 +145,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
   );
 
   return (
-    <Surface
-      style={[
-        styles.surface,
-        { backgroundColor: theme.colors.onSurfaceVariant },
-      ]}
-      elevation={5}
-    >
-      <Text variant='titleLarge' style={styles.sectionTitle}>
-        Basic Information
-      </Text>
-
+    <CustomSurface title='Basic Information'>
       {fieldConfigs.map((config) => (
         <InfoItem
           key={config.key}
@@ -178,19 +168,6 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
           !isLoadingChoices &&
           currentField.renderEditContent(draftValue, choices, setDraftValue)}
       </ProfileEditModal>
-    </Surface>
+    </CustomSurface>
   );
 };
-
-const styles = StyleSheet.create({
-  surface: {
-    padding: 12,
-    marginVertical: 8,
-    borderRadius: 8,
-  },
-  sectionTitle: {
-    marginBottom: 16,
-    fontWeight: '600',
-    color: 'white',
-  },
-});

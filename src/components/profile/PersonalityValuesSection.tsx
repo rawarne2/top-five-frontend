@@ -12,6 +12,7 @@ import { useUpdateProfile } from '../../hooks/mutations';
 import type { Profile } from '../../hooks/queries';
 import isEqual from 'lodash/isEqual';
 import { InterestsSelector } from '../InterestsSelector';
+import { CustomSurface } from '../../containers/CustomSurface';
 
 type EditingField =
   | 'core_values'
@@ -253,17 +254,7 @@ export const PersonalityValuesSection: React.FC<
   );
 
   return (
-    <Surface
-      style={[
-        styles.surface,
-        { backgroundColor: theme.colors.onSurfaceVariant },
-      ]}
-      elevation={5}
-    >
-      <Text variant='titleLarge' style={styles.sectionTitle}>
-        Personality & Values
-      </Text>
-
+    <CustomSurface title='Personality & Values'>
       {fieldConfigs.map((config) => (
         <InfoItem
           key={config.key}
@@ -286,19 +277,6 @@ export const PersonalityValuesSection: React.FC<
           !isLoadingChoices &&
           currentField.renderEditContent(draftValue, choices, setDraftValue)}
       </ProfileEditModal>
-    </Surface>
+    </CustomSurface>
   );
 };
-
-const styles = StyleSheet.create({
-  surface: {
-    padding: 12,
-    marginVertical: 8,
-    borderRadius: 8,
-  },
-  sectionTitle: {
-    marginBottom: 16,
-    fontWeight: '600',
-    color: 'white',
-  },
-});

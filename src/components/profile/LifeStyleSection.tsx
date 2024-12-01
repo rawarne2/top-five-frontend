@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { StyleSheet } from 'react-native';
-import { Surface, Text, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { InfoItem } from '../fields/InfoItem';
 import { ProfileEditModal } from '../modals/ProfileEditModal';
@@ -9,6 +8,7 @@ import { useProfileChoices } from '../../hooks/queries';
 import { useUpdateProfile } from '../../hooks/mutations';
 import type { Profile } from '../../hooks/queries';
 import isEqual from 'lodash/isEqual';
+import { CustomSurface } from '../../containers/CustomSurface';
 
 type EditingField =
   | 'alcohol_frequency'
@@ -149,17 +149,7 @@ export const LifestyleSection: React.FC<LifestyleSectionProps> = ({
   );
 
   return (
-    <Surface
-      style={[
-        styles.surface,
-        { backgroundColor: theme.colors.onSurfaceVariant },
-      ]}
-      elevation={5}
-    >
-      <Text variant='titleLarge' style={styles.sectionTitle}>
-        Lifestyle
-      </Text>
-
+    <CustomSurface title='Lifestyle'>
       {fieldConfigs.map((config) => (
         <InfoItem
           key={config.key}
@@ -185,19 +175,6 @@ export const LifestyleSection: React.FC<LifestyleSectionProps> = ({
           />
         )}
       </ProfileEditModal>
-    </Surface>
+    </CustomSurface>
   );
 };
-
-const styles = StyleSheet.create({
-  surface: {
-    padding: 12,
-    marginVertical: 8,
-    borderRadius: 8,
-  },
-  sectionTitle: {
-    marginBottom: 16,
-    fontWeight: '600',
-    color: 'white',
-  },
-});
