@@ -4,12 +4,7 @@ import * as FileSystem from 'expo-file-system';
 import { ImagePickerAsset } from 'expo-image-picker';
 import { AuthContextType, useAuth, User } from '../contexts/AuthContext';
 import apiClient from '../api/apiClient';
-import { deleteSecureStoreJWTs, saveSecureStoreJWTs } from '../utils/tokenManager';
-import {
-    deleteSecureStoreUID,
-    saveUserToSecureStore,
-    getSecureStoreUID,
-} from '../utils/secureStoreManager';
+import { deleteTokenAndUserIdFromSS, saveTokenAndUserIdToSS } from '../utils/tokenManager';
 
 type LoginResponseType = {
     user: User;
@@ -30,6 +25,7 @@ const findUrlByPhotoNumber = (urls: string[], photoNumber: number): string | nul
 };
 
 import { Profile } from '../hooks/queries';
+import { getSecureStoreUID } from '../utils/secureStoreManager';
 
 const uploadPhotos = async (photos: PhotoUpload[]): Promise<Profile> => {
     const userId = await getSecureStoreUID();
@@ -87,9 +83,9 @@ export const useLogin = (useAuth: () => AuthContextType) => {
 
                 const { access, refresh } = response?.data?.tokens;
                 const user: User = response.data.user;
+                const userId = user?.id;
 
-                await saveSecureStoreJWTs(access, refresh);
-                await saveUserToSecureStore(user);
+                await saveTokenAndUserIdToSS(access, refresh, userId.toString());
 
                 return { user, tokens: { access, refresh } };
             } catch (error) {
@@ -99,7 +95,6 @@ export const useLogin = (useAuth: () => AuthContextType) => {
         },
         onSuccess: (user) => {
             queryClient.setQueryData(['user'], user);
-            saveSecureStoreJWTs(user.tokens.access, user.tokens.refresh);
             setIsLoggedIn(true);
         },
         onError: (error) => {
@@ -121,8 +116,7 @@ export const useLogout = () => {
             queryClient.setQueryData(['user'], null);
             delete apiClient.defaults.headers.common.Authorization;
             setIsLoggedIn(false);
-            deleteSecureStoreJWTs();
-            deleteSecureStoreUID();
+            deleteTokenAndUserIdFromSS();
         },
     });
 };

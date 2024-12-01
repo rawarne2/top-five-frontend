@@ -1,6 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import { Button, Text, TextInput, useTheme } from 'react-native-paper';
+import {
+  ActivityIndicator,
+  Button,
+  Text,
+  TextInput,
+  useTheme,
+} from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
 import { useLogin } from '../hooks/mutations';
@@ -17,10 +23,22 @@ function LoginScreen() {
       password: '',
     },
   });
-  const login = useLogin(useAuth);
+
+  const { mutate, isPending } = useLogin(useAuth);
+
   const onSubmit = async (data) => {
-    await login.mutate({ email: data.email, password: data.password });
+    await mutate({ email: data.email, password: data.password });
   };
+
+  if (isPending)
+    return (
+      <ActivityIndicator
+        size='large'
+        color={theme.colors.tertiary}
+        style={{ flex: 1 }}
+      />
+    );
+
   return (
     <View
       style={{

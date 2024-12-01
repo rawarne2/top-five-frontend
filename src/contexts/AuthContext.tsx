@@ -7,14 +7,14 @@ import React, {
 } from 'react';
 import { getSSAccessToken, isValidToken } from '../utils/tokenManager';
 /*
-context will hold user data (firstName, lastName, email) AND isLoggedIn with setIsLoggedIn.
-React Query will hold profile data (age, bio, birthdate, gender, location, preferred_age_max, preferred_age_min, preferred_gender, etc.)
-since it was split up in the backend.
-if there is a valid token in the secure storage and and the user exists, the context value isLoggedIn will be set to true.
+This context is used to determine if the user is logged in or not.
+if there is a valid token and a userId in the expo secure store,the context value isLoggedIn will be set to true.
 */
+
 export type User = {
   // TODO: move to different file
   id: number;
+  birthdate: Date;
   first_name: string;
   last_name: string;
   email: string;
@@ -40,7 +40,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
           setIsLoggedIn(true);
         }
       } catch (error) {
-        console.warn('No userId found in Secure Store: ', error);
+        console.warn('Error checking login status: ', error);
         return null;
       }
     })();

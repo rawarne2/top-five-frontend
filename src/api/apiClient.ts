@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_URL } from "@env";
-import { getSSAccessToken, getSSRefreshToken, isValidToken, saveSecureStoreJWTs } from "../utils/tokenManager";
+import { getSSAccessToken, getSSRefreshToken, isValidToken, saveTokenAndUserIdToSS } from "../utils/tokenManager";
 
 const isNgrok = () => API_URL.includes('ngrok');
 
@@ -36,7 +36,7 @@ apiClient.interceptors.request.use(async (config) => {
                 const { access: newAccessToken, refresh: newRefreshToken } = response.data;
 
                 if (newAccessToken && newRefreshToken) {
-                    await saveSecureStoreJWTs(newAccessToken, newRefreshToken);
+                    await saveTokenAndUserIdToSS(newAccessToken, newRefreshToken);
                     config.headers.Authorization = `Bearer ${newAccessToken}`;
                 }
             } catch (err) {

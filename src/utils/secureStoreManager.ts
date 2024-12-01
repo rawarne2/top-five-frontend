@@ -1,13 +1,9 @@
 import * as SecureStore from 'expo-secure-store';
-import { User } from '../contexts/AuthContext';
 
 export enum SSKey {
     access_token = 'access_token',
     refresh_token = 'refresh_token',
     user_id = 'user_id',
-    first_name = 'first_name',
-    last_name = 'last_name',
-    email = 'email',
 }
 
 export const saveToSecureStore = async (
@@ -35,11 +31,12 @@ export const getSecureStoreValue = async (
         return null;
     }
     try {
-        const value = await SecureStore.getItemAsync(key);
+        const value = JSON.parse(await SecureStore.getItemAsync(key));
         if (value === null) {
+            console.warn('No value found in Secure Store for key: ', key);
             return null;
         }
-        return JSON.parse(value);
+        return value;
     } catch (error) {
         console.error(`Error getting SecureStore value with key: ${key}: `, error);
         return null;
@@ -59,16 +56,6 @@ export const deleteSecureStoreValue = async (key: string): Promise<void> => {
     }
 };
 
-export const saveUserToSecureStore = async (user: User): Promise<void> => {
-    if (!user) {
-        console.warn('No user object provided to saveUserToSecureStore');
-        return;
-    }
-    await saveToSecureStore(SSKey.user_id, user.id.toString());
-    await saveToSecureStore(SSKey.first_name, user.first_name);
-    await saveToSecureStore(SSKey.last_name, user.last_name);
-    await saveToSecureStore(SSKey.email, user.email);
-};
 
 export const getSecureStoreUID = (): Promise<string | null> => {
     return getSecureStoreValue(SSKey.user_id);
@@ -76,17 +63,4 @@ export const getSecureStoreUID = (): Promise<string | null> => {
 
 export const deleteSecureStoreUID = async (): Promise<void> => {
     await deleteSecureStoreValue(SSKey.user_id);
-};
-
-export const getFullNameFromSecureStore = async (): Promise<string | null> => {
-    const firstName = await getSecureStoreValue(SSKey.first_name);
-    const lastName = await getSecureStoreValue(SSKey.last_name);
-    if (firstName === null && lastName === null) {
-        return null;
-    }
-    return `${firstName || ''} ${lastName || ''}`.trim();
-};
-
-export const getEmailFromSecureStore = async (): Promise<string | null> => {
-    return getSecureStoreValue(SSKey.email);
 };

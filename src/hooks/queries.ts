@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import * as ImagePicker from 'expo-image-picker';
 import { getSecureStoreUID } from "../utils/secureStoreManager";
 import apiClient from "../api/apiClient";
 import cards from '../data/usersCardData.json';

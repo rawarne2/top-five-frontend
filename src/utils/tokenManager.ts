@@ -1,17 +1,17 @@
 import { saveToSecureStore, getSecureStoreValue, deleteSecureStoreValue, SSKey } from "./secureStoreManager";
 import { decode as atob } from "base-64";
 
-// There is always only zero or one access_token, refresh_token, and user_id in the SecureStore at a time 
-
-export const saveSecureStoreJWTs = async (access_token: string, refresh_token: string): Promise<void> => {
+export const saveTokenAndUserIdToSS = async (access_token: string, refresh_token: string, userId?: string): Promise<void> => {
     await saveToSecureStore(SSKey.access_token, access_token);
     await saveToSecureStore(SSKey.refresh_token, refresh_token);
+    if (userId) await saveToSecureStore(SSKey.user_id, userId);
 }
 
 // used for logout or deleting account
-export const deleteSecureStoreJWTs = async (): Promise<void> => {
+export const deleteTokenAndUserIdFromSS = async (): Promise<void> => {
     await deleteSecureStoreValue('access_token');
     await deleteSecureStoreValue('refresh_token');
+    await deleteSecureStoreValue('user_id');
 }
 
 export const getSSAccessToken = (): Promise<string | null> => {
